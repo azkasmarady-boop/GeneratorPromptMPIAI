@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Prompt Media Pembelajaran — Z. ASMARADY</title>
+    <style>
+        /* ==========================================================================
+           DESIGN TOKENS & CUSTOM VARIABLES (Pure CSS tanpa ketergantungan eksternal)
+           ========================================================================== */
+        :root {
+            --primary-dark: #0f172a;      /* Slate 900 */
+            --primary: #1e3a8a;           /* Indigo/Blue 900 */
+            --primary-hover: #1d4ed8;     /* Blue 700 */
+            --accent-teal: #0d9488;       /* Teal 600 */
+            --accent-teal-light: #ccfbf1; /* Teal 100 */
+            --accent-gold: #d97706;       /* Amber 600 */
+            --accent-gold-bg: #fef3c7;    /* Amber 100 */
+            --canva-purple: #7c3aed;      /* Violet 600 */
+            --canva-purple-light: #ede9fe;/* Violet 100 */
+            --success-green: #059669;     /* Emerald 600 */
+            --success-green-hover: #047857;
+            --bg-body: #f1f5f9;           /* Slate 100 */
+            --bg-card: #ffffff;
+            --text-main: #1e293b;         /* Slate 800 */
+            --text-muted: #64748b;        /* Slate 500 */
+            --border-color: #cbd5e1;      /* Slate 300 */
+            --border-subtle: #e2e8f0;     /* Slate 200 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        /* ==========================================================================
+           RESET & BASE STYLES
+           ========================================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================================================
+           HEADER & BRANDING
+           ========================================================================== */
+        .app-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 65%, #0f766e 100%);
+            color: #ffffff;
+            padding: 1.75rem 1.25rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.09) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand-title {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            font-size: 0.925rem;
+            color: #cbd5e1;
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+
+        .header-right-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .header-copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(16, 185, 129, 0.2);
+            hover: background: rgba(16, 185, 129, 0.35);
+            border: 1px solid rgba(52, 211, 153, 0.55);
+            color: #ecfdf5;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .header-copy-btn:hover {
+            background: rgba(16, 185, 129, 0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(251, 191, 36, 0.45);
+            color: #fef3c7;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dev-badge-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #fbbf24;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #fbbf24;
+        }
+
+        /* ==========================================================================
+           MAIN LAYOUT CONTAINER
+           ========================================================================== */
+        .main-container {
+            max-width: 1320px;
+            width: 100%;
+            margin: 1.75rem auto;
+            padding: 0 1.25rem;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.75rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1.05fr 0.95fr;
+                align-items: start;
+            }
+        }
+
+        /* ==========================================================================
+           CARDS & PANELS
+           ========================================================================== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        @media (min-width: 640px) {
+            .card {
+                padding: 1.75rem;
+            }
+        }
+
+        .card-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ==========================================================================
+           PLATFORM SELECTOR TABS (GEMINI VS CANVA)
+           ========================================================================== */
+        .platform-switcher {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            background: #f8fafc;
+            padding: 0.45rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.2rem;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-md);
+            border: 2px solid transparent;
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            font-family: inherit;
+        }
+
+        .platform-btn:hover {
+            background: #ffffff;
+            color: var(--text-main);
+        }
+
+        .platform-btn.active-gemini {
+            background: #ffffff;
+            border-color: var(--primary-hover);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .platform-btn.active-canva {
+            background: #ffffff;
+            border-color: var(--canva-purple);
+            color: var(--canva-purple);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .platform-btn-top {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .platform-btn-desc {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* ==========================================================================
+           FORM ELEMENTS & QUICK CHIPS
+           ========================================================================== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.15rem;
+        }
+
+        @media (min-width: 640px) {
+            .form-grid-2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .label-hint {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.925rem;
+            font-family: inherit;
+            color: var(--text-main);
+            background-color: #ffffff;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            min-height: 44px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-hover);
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+        }
+
+        textarea.form-control {
+            min-height: 82px;
+            resize: vertical;
+        }
+
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+        }
+
+        .chip-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 0.76rem;
+            font-weight: 500;
+            padding: 0.3rem 0.65rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .chip-btn:hover {
+            background: #e0e7ff;
+            border-color: #818cf8;
+            color: #1e3a8a;
+        }
+
+        /* ==========================================================================
+           BUTTONS
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            min-height: 44px;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-auto {
+            background: var(--accent-gold-bg);
+            color: #92400e;
+            border-color: #fcd34d;
+            font-size: 0.8rem;
+            padding: 0.45rem 0.85rem;
+            min-height: 36px;
+        }
+
+        .btn-auto:hover {
+            background: #fde68a;
+        }
+
+        .btn-reset {
+            background: #f8fafc;
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            font-size: 0.8rem;
+            padding: 0.45rem 0.85rem;
+            min-height: 36px;
+        }
+
+        .btn-reset:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.07);
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.35);
+        }
+
+        /* Tombol Salin Prompt Utama yang Menonjol */
+        .btn-copy-main {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28);
+            border: 1px solid #047857;
+        }
+
+        .btn-copy-main:hover {
+            filter: brightness(1.07);
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.38);
+        }
+
+        .btn-copy-main.copied-state {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+            border-color: #1e40af;
+        }
+
+        .btn-gemini {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .btn-gemini:hover {
+            background: #dbeafe;
+        }
+
+        .btn-canva {
+            background: var(--canva-purple-light);
+            color: var(--canva-purple);
+            border-color: #ddd6fe;
+        }
+
+        .btn-canva:hover {
+            background: #ddd6fe;
+        }
+
+        .btn-danger-sm {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.76rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .btn-danger-sm:hover {
+            background: #fee2e2;
+        }
+
+        /* ==========================================================================
+           OUTPUT PREVIEW BOX & COPY MENU BAR
+           ========================================================================== */
+        .sticky-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .sticky-column {
+                position: sticky;
+                top: 1.25rem;
+            }
+        }
+
+        .platform-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .pill-gemini {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .pill-canva {
+            background: var(--canva-purple-light);
+            color: #5b21b6;
+        }
+
+        /* Menu Bilah Aksi Salin Prompt (Copy Toolbar) */
+        .copy-menu-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: var(--radius-md);
+            padding: 0.65rem 0.9rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .copy-menu-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        .copy-menu-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-toolbar-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #059669;
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.42rem 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 3px rgba(5, 150, 105, 0.25);
+        }
+
+        .btn-toolbar-copy:hover {
+            background: #047857;
+        }
+
+        .btn-toolbar-select {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #ffffff;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.7rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+
+        .btn-toolbar-select:hover {
+            background: #d1fae5;
+        }
+
+        .prompt-output-wrapper {
+            position: relative;
+            background: #0f172a;
+            border-radius: var(--radius-lg);
+            border: 1px solid #334155;
+            overflow: hidden;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .prompt-output-topbar {
+            background: #1e293b;
+            padding: 0.55rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            gap: 0.5rem;
+        }
+
+        .window-dots {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .window-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .topbar-right-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .topbar-copy-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #059669;
+            color: #ffffff;
+            border: 1px solid #10b981;
+            border-radius: 6px;
+            padding: 0.25rem 0.65rem;
+            font-size: 0.74rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+
+        .topbar-copy-chip:hover {
+            background: #10b981;
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            min-height: 350px;
+            max-height: 520px;
+            padding: 1.15rem;
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: var(--font-mono);
+            font-size: 0.84rem;
+            line-height: 1.65;
+            border: none;
+            resize: vertical;
+            outline: none;
+        }
+
+        .action-bar {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 540px) {
+            .action-bar {
+                grid-template-columns: 1.35fr 1fr 1fr;
+            }
+        }
+
+        /* ==========================================================================
+           HISTORY SECTION
+           ========================================================================== */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            max-height: 270px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .history-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .history-item:hover {
+            border-color: #94a3b8;
+            background: #ffffff;
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+
+        .history-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 0.15rem;
+            flex-wrap: wrap;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.35rem;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            padding: 0.35rem 0.55rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .icon-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-hover);
+            color: var(--primary);
+        }
+
+        .icon-btn.copy-hist {
+            background: #ecfdf5;
+            border-color: #6ee7b7;
+            color: #047857;
+        }
+
+        .icon-btn.copy-hist:hover {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .icon-btn.del:hover {
+            background: #fef2f2;
+            border-color: #f87171;
+            color: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            border: 1px dashed var(--border-color);
+        }
+
+        /* ==========================================================================
+           TOAST NOTIFICATION (Menggantikan alert())
+           ========================================================================== */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 0.8rem 1.15rem;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #10b981;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            animation: slideIn 0.25s ease forwards;
+            max-width: 360px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        .app-footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 1.25rem 1rem;
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        .app-footer strong {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================================================================
+         HEADER & BRANDING
+         ====================================================================== -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-box">
+                <div class="brand-icon" aria-hidden="true">
+                    <!-- Inline SVG Icon: Topi Wisuda & Sparkle AI -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">Generator Prompt Media Pembelajaran</h1>
+                    <p class="brand-subtitle">Buat prompt AI siap pakai untuk Gemini &amp; Canva</p>
+                </div>
+            </div>
+            <div class="header-right-actions">
+                <button type="button" id="btnHeaderCopy" class="header-copy-btn" title="Salin hasil prompt ke clipboard sekarang">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    <span>Salin Prompt</span>
+                </button>
+                <div class="dev-badge" title="Pengembang Aplikasi">
+                    <span class="dev-badge-dot"></span>
+                    <span>Dikembangkan oleh Z. ASMARADY</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ======================================================================
+         MAIN APPLICATION WORKSPACE
+         ====================================================================== -->
+    <main class="main-container">
+        
+        <!-- KOLOM KIRI: KONFIGURASI PARAMETER PEMBELAJARAN -->
+        <section class="card" aria-labelledby="form-section-title">
+            <div class="card-header">
+                <h2 class="card-title" id="form-section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                    Parameter Pembelajaran
+                </h2>
+                <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+                    <button type="button" id="btnAutoFill" class="btn btn-auto" title="Isi otomatis contoh skenario pembelajaran">
+                        ✨ Contoh Cepat (Isi Otomatis)
+                    </button>
+                    <button type="button" id="btnResetForm" class="btn btn-reset" title="Kosongkan formulir">
+                        ↺ Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- 1. Pilihan Target Platform AI -->
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label class="form-label">1. Pilih Target Platform AI</label>
+                <div class="platform-switcher" role="tablist" aria-label="Target Platform AI">
+                    <button type="button" id="tabGemini" class="platform-btn active-gemini" role="tab" aria-selected="true">
+                        <span class="platform-btn-top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                            Google Gemini
+                        </span>
+                        <span class="platform-btn-desc">Teks, Kode Web Interaktif, Kuis, Modul</span>
+                    </button>
+
+                    <button type="button" id="tabCanva" class="platform-btn" role="tab" aria-selected="false">
+                        <span class="platform-btn-top">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            Canva AI / Magic Media
+                        </span>
+                        <span class="platform-btn-desc">Presentasi, Infografis, Poster, Lembar Kerja</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Form Input Parameter -->
+            <form id="promptForm" class="form-grid" onsubmit="return false;">
+                
+                <!-- Jenjang & Kelas/Fase -->
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="jenjang" class="form-label">Jenjang Pendidikan</label>
+                        <select id="jenjang" class="form-control">
+                            <option value="SD/MI">SD / MI</option>
+                            <option value="SMP/MTs">SMP / MTs</option>
+                            <option value="SMA/MA/SMK" selected>SMA / MA / SMK</option>
+                            <option value="Perguruan Tinggi">Perguruan Tinggi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kelas" class="form-label">Kelas / Fase</label>
+                        <input type="text" id="kelas" class="form-control" placeholder="Misal: Kelas X / Fase E" value="Kelas X / Fase E">
+                    </div>
+                </div>
+
+                <!-- Mata Pelajaran dengan Saran Cepat -->
+                <div class="form-group">
+                    <label for="mapelSelect" class="form-label">
+                        <span>Mata Pelajaran (SD, SMP, hingga SMA)</span>
+                        <span class="label-hint">Cari cepat, pilih daftar lengkap, atau ketik manual</span>
+                    </label>
+                    <input type="search" id="mapelSearch" class="form-control" placeholder="🔍 Ketik kata kunci untuk menyaring mapel (misal: Fisika, Sosiologi, PPKn, Jepang)..." style="min-height: 38px; font-size: 0.85rem; background-color: #f8fafc; margin-bottom: 0.25rem;" aria-label="Filter pencarian mata pelajaran">
+                    <select id="mapelSelect" class="form-control" aria-label="Daftar Lengkap Mata Pelajaran SD, SMP, SMA">
+                        <optgroup label="Mata Pelajaran Umum & Wajib (SD / SMP / SMA)">
+                            <option value="Pendidikan Pancasila (PPKn)" selected>Pendidikan Pancasila (PPKn)</option>
+                            <option value="Pendidikan Agama & Budi Pekerti">Pendidikan Agama &amp; Budi Pekerti</option>
+                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                            <option value="Matematika (Umum)">Matematika (Umum)</option>
+                            <option value="Matematika Tingkat Lanjut (SMA)">Matematika Tingkat Lanjut (SMA)</option>
+                            <option value="Bahasa Inggris (Umum)">Bahasa Inggris (Umum)</option>
+                            <option value="Bahasa Inggris Tingkat Lanjut (SMA)">Bahasa Inggris Tingkat Lanjut (SMA)</option>
+                            <option value="Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)">Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)</option>
+                            <option value="Informatika / TIK">Informatika / TIK</option>
+                            <option value="Prakarya dan Kewirausahaan (PKWU)">Prakarya dan Kewirausahaan (PKWU)</option>
+                            <option value="Muatan Lokal / Bahasa Daerah">Muatan Lokal / Bahasa Daerah</option>
+                        </optgroup>
+                        <optgroup label="Rumpun MIPA (SMA / IPA Terpadu SD-SMP)">
+                            <option value="Fisika (SMA)">Fisika (SMA)</option>
+                            <option value="Kimia (SMA)">Kimia (SMA)</option>
+                            <option value="Biologi (SMA)">Biologi (SMA)</option>
+                            <option value="Ilmu Pengetahuan Alam (IPA Terpadu SD/SMP)">Ilmu Pengetahuan Alam (IPA Terpadu SD/SMP)</option>
+                            <option value="IPAS (Ilmu Pengetahuan Alam dan Sosial - SD)">IPAS (Ilmu Pengetahuan Alam dan Sosial - SD)</option>
+                        </optgroup>
+                        <optgroup label="Rumpun IPS & Humaniora (SMA / IPS Terpadu SD-SMP)">
+                            <option value="Sejarah Indonesia">Sejarah Indonesia</option>
+                            <option value="Sejarah Tingkat Lanjut (SMA)">Sejarah Tingkat Lanjut (SMA)</option>
+                            <option value="Geografi (SMA)">Geografi (SMA)</option>
+                            <option value="Ekonomi (SMA)">Ekonomi (SMA)</option>
+                            <option value="Sosiologi (SMA)">Sosiologi (SMA)</option>
+                            <option value="Antropologi (SMA)">Antropologi (SMA)</option>
+                            <option value="Ilmu Pengetahuan Sosial (IPS Terpadu SD/SMP)">Ilmu Pengetahuan Sosial (IPS Terpadu SD/SMP)</option>
+                        </optgroup>
+                        <optgroup label="Rumpun Bahasa, Sastra & Seni Budaya (SD / SMP / SMA)">
+                            <option value="Seni Budaya (Seni Musik)">Seni Budaya — Seni Musik</option>
+                            <option value="Seni Budaya (Seni Rupa)">Seni Budaya — Seni Rupa</option>
+                            <option value="Seni Budaya (Seni Tari)">Seni Budaya — Seni Tari</option>
+                            <option value="Seni Budaya (Seni Teater)">Seni Budaya — Seni Teater</option>
+                            <option value="Bahasa dan Sastra Indonesia (SMA)">Bahasa dan Sastra Indonesia (SMA)</option>
+                            <option value="Bahasa dan Sastra Inggris (SMA)">Bahasa dan Sastra Inggris (SMA)</option>
+                            <option value="Bahasa Arab (SMA)">Bahasa Arab (SMA)</option>
+                            <option value="Bahasa Jepang (SMA)">Bahasa Jepang (SMA)</option>
+                            <option value="Bahasa Jerman (SMA)">Bahasa Jerman (SMA)</option>
+                            <option value="Bahasa Prancis (SMA)">Bahasa Prancis (SMA)</option>
+                            <option value="Bahasa Mandarin (SMA)">Bahasa Mandarin (SMA)</option>
+                        </optgroup>
+                        <optgroup label="Kustom / Spesifik">
+                            <option value="__CUSTOM__">✏️ Lainnya (Ketik Nama Mata Pelajaran Manual)...</option>
+                        </optgroup>
+                    </select>
+                    <input type="text" id="mapelCustom" class="form-control" placeholder="Ketik nama mata pelajaran spesifik Anda di sini..." style="display: none; margin-top: 0.35rem; border-color: #1d4ed8; background-color: #eff6ff;">
+                    <div class="chip-group" aria-label="Pintasan Cepat Mata Pelajaran Populer">
+                        <button type="button" class="chip-btn mapel-chip" data-value="Pendidikan Pancasila (PPKn)">PPKn</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)">PJOK</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Fisika (SMA)">Fisika SMA</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Biologi (SMA)">Biologi SMA</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Ekonomi (SMA)">Ekonomi SMA</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Sosiologi (SMA)">Sosiologi SMA</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Sejarah Tingkat Lanjut (SMA)">Sejarah SMA</button>
+                        <button type="button" class="chip-btn mapel-chip" data-value="Informatika / TIK">Informatika</button>
+                    </div>
+                </div>
+
+                <!-- Topik / Materi Pokok -->
+                <div class="form-group">
+                    <label for="topik" class="form-label">Topik / Materi Pokok</label>
+                    <input type="text" id="topik" class="form-control" placeholder="Masukkan judul materi pokok pembelajaran..." value="Hak dan Kewajiban Konstitusional Warga Negara Berdasarkan UUD NRI Tahun 1945">
+                </div>
+
+                <!-- Tujuan Pembelajaran -->
+                <div class="form-group">
+                    <label for="tujuan" class="form-label">
+                        <span>Tujuan Pembelajaran (TP)</span>
+                        <span class="label-hint">Opsional / Terstruktur</span>
+                    </label>
+                    <textarea id="tujuan" class="form-control" placeholder="Contoh: Peserta didik mampu menganalisis dan mengimplementasikan nilai Pancasila dalam memecahkan permasalahan sosial di lingkungan sekolah.">Peserta didik mampu menganalisis kasus pelanggaran hak dan pengingkaran kewajiban warga negara serta merumuskan solusi partisipatif berbasis nilai-nilai Pancasila dan UUD NRI Tahun 1945 secara kritis.</textarea>
+                </div>
+
+                <!-- Jenis Media Pembelajaran (Dinamis sesuai Platform) -->
+                <div class="form-group">
+                    <label for="jenisMedia" class="form-label">
+                        <span>Jenis Media Pembelajaran</span>
+                        <span id="mediaPlatformHint" class="label-hint">Opsi khusus Google Gemini</span>
+                    </label>
+                    <select id="jenisMedia" class="form-control">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Gaya Bahasa / Visual & Tingkat Kognitif -->
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="gaya" class="form-label">Gaya Bahasa &amp; Visual</label>
+                        <select id="gaya" class="form-control">
+                            <option value="Interaktif & Menyenangkan" selected>Interaktif &amp; Menyenangkan</option>
+                            <option value="Formal Akademis">Formal Akademis</option>
+                            <option value="Gamifikasi">Gamifikasi (Berbasis Tantangan/Skor)</option>
+                            <option value="Minimalis Modern">Minimalis Modern</option>
+                            <option value="Ilustrasi Kartun Edukatif">Ilustrasi Kartun Edukatif</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tingkat" class="form-label">Tingkat Kognitif / Pendekatan</label>
+                        <select id="tingkat" class="form-control">
+                            <option value="HOTS / Berpikir Kritis" selected>HOTS / Berpikir Kritis (C4–C6)</option>
+                            <option value="Reguler">Reguler (Pemahaman &amp; Aplikasi)</option>
+                            <option value="Diferensiasi">Pembelajaran Berdiferensiasi</option>
+                            <option value="Project-Based Learning (PjBL)">Project-Based Learning (PjBL)</option>
+                            <option value="Problem-Based Learning (PBL)">Problem-Based Learning (PBL)</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- KOLOM KANAN: PRATINJAU HASIL PROMPT, MENU SALIN PROMPT & RIWAYAT -->
+        <div class="sticky-column">
+            
+            <!-- Kartu Hasil Prompt & Menu Salin Prompt -->
+            <section class="card" aria-labelledby="output-section-title">
+                <div class="card-header">
+                    <h2 class="card-title" id="output-section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                        Hasil Prompt Siap Pakai
+                    </h2>
+                    <span id="activePlatformBadge" class="platform-pill pill-gemini">Target: Google Gemini</span>
+                </div>
+
+                <!-- MENU SALIN PROMPT TERPADU (COPY MENU TOOLBAR) -->
+                <div class="copy-menu-bar" role="region" aria-label="Menu Salin Prompt">
+                    <div class="copy-menu-info">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <span>Menu Salin Prompt:</span>
+                    </div>
+                    <div class="copy-menu-actions">
+                        <button type="button" id="btnToolbarCopy" class="btn-toolbar-copy" title="Salin seluruh isi prompt ke clipboard">
+                            📋 Salin Semua Prompt
+                        </button>
+                        <button type="button" id="btnSelectAllPrompt" class="btn-toolbar-select" title="Blok/sorot seluruh teks prompt">
+                            🔍 Pilih Semua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kotak Output Prompt -->
+                <div class="prompt-output-wrapper">
+                    <div class="prompt-output-topbar">
+                        <div class="window-dots" aria-hidden="true">
+                            <span style="background:#ef4444;"></span>
+                            <span style="background:#f59e0b;"></span>
+                            <span style="background:#10b981;"></span>
+                            <span style="margin-left: 0.4rem; color: #cbd5e1; font-weight: 600;">prompt-ai-edukasi.txt</span>
+                        </div>
+                        <div class="topbar-right-group">
+                            <span id="charCount">0 karakter</span>
+                            <button type="button" id="btnTopbarCopy" class="topbar-copy-chip" title="Salin cepat teks prompt">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="promptOutput" class="prompt-textarea" readonly aria-label="Hasil Prompt AI yang Dihasilkan"></textarea>
+                </div>
+
+                <!-- Bilah Tombol Aksi Utama -->
+                <div class="action-bar">
+                    <button type="button" id="btnCopyPrompt" class="btn btn-copy-main">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <span id="btnCopyMainText">Salin Prompt</span>
+                    </button>
+
+                    <a href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" class="btn btn-gemini" title="Buka Google Gemini di tab baru">
+                        ✨ Buka Gemini
+                    </a>
+
+                    <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" class="btn btn-canva" title="Buka Canva di tab baru">
+                        🎨 Buka Canva
+                    </a>
+                </div>
+            </section>
+
+            <!-- Kartu Riwayat Prompt -->
+            <section class="card" aria-labelledby="history-section-title">
+                <div class="card-header">
+                    <h2 class="card-title" id="history-section-title">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Riwayat Prompt Tersimpan
+                    </h2>
+                    <button type="button" id="btnClearHistory" class="btn-danger-sm" title="Hapus seluruh riwayat tersimpan">
+                        Hapus Riwayat
+                    </button>
+                </div>
+
+                <div id="historyList" class="history-list">
+                    <!-- Diisi secara dinamis dari localStorage -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ======================================================================
+         TOAST NOTIFICATION CONTAINER
+         ====================================================================== -->
+    <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ======================================================================
+         FOOTER
+         ====================================================================== -->
+    <footer class="app-footer">
+        <p>&copy; 2026 <strong>Generator Prompt Media Pembelajaran</strong> • Dikembangkan oleh <strong>Z. ASMARADY</strong></p>
+    </footer>
+
+    <!-- ======================================================================
+         JAVASCRIPT LOGIC & PROMPT ENGINE
+         ====================================================================== -->
+    <script>
+        (function () {
+            'use strict';
+
+            // ------------------------------------------------------------------
+            // 1. KONFIGURASI DATA & TEMPLAT MEDIA PEMBELAJARAN
+            // ------------------------------------------------------------------
+            const MEDIA_OPTIONS = {
+                gemini: [
+                    'Game Edukasi Interaktif (HTML5)',
+                    'Aplikasi Pembelajaran LMS',
+                    'Presentasi Interaktif',
+                    'Kuis Pilihan Ganda HOTS',
+                    'Modul Ajar Kurikulum Merdeka',
+                    'Simulasi / Studi Kasus',
+                    'Rangkuman Materi & LKPD'
+                ],
+                canva: [
+                    'Slide Presentasi Interaktif',
+                    'Presentasi Interaktif',
+                    'Aplikasi Pembelajaran LMS',
+                    'Infografis Konsep',
+                    'Poster Edukasi Kelas',
+                    'Lembar Kerja Peserta Didik (LKPD) Visual',
+                    'Komik Strip Pembelajaran'
+                ]
+            };
+
+            // Contoh Skenario Otomatis untuk Tombol "Contoh Cepat" (Lengkap SD, SMP, hingga SMA)
+            const SAMPLE_SCENARIOS = [
+                {
+                    platform: 'gemini',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas XI / Fase F',
+                    mapel: 'Pendidikan Pancasila (PPKn)',
+                    topik: 'Hak dan Kewajiban Konstitusional Warga Negara & Penyelesaian Sengketa Demokrasi',
+                    tujuan: 'Peserta didik mampu mengevaluasi kasus pelanggaran hak dan pengingkaran kewajiban warga negara di era digital serta merancang gagasan solusi konstitusional berbasis UUD NRI Tahun 1945.',
+                    jenisMedia: 'Simulasi / Studi Kasus',
+                    gaya: 'Interaktif & Menyenangkan',
+                    tingkat: 'HOTS / Berpikir Kritis'
+                },
+                {
+                    platform: 'gemini',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas X / Fase E',
+                    mapel: 'Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)',
+                    topik: 'Kebugaran Jasmani, Analisis Zona Denyut Nadi Latihan, dan Strategi Permainan Bola Besar',
+                    tujuan: 'Peserta didik mampu menghitung zona latihan aerobik berdasarkan denyut nadi maksimal (DNM) serta menyusun strategi pola penyerangan dan pertahanan dalam permainan bola basket/sepak bola.',
+                    jenisMedia: 'Game Edukasi Interaktif (HTML5)',
+                    gaya: 'Gamifikasi',
+                    tingkat: 'HOTS / Berpikir Kritis'
+                },
+                {
+                    platform: 'canva',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas XI / Fase F',
+                    mapel: 'Biologi (SMA)',
+                    topik: 'Mekanisme Sistem Imun Tubuh Manusia dan Respons Terhadap Patogen',
+                    tujuan: 'Peserta didik mampu membedakan mekanisme pertahanan tubuh nonspesifik dan spesifik serta menyajikan kampanye edukasi vaksinasi berbasis literasi sains.',
+                    jenisMedia: 'Infografis Konsep',
+                    gaya: 'Minimalis Modern',
+                    tingkat: 'HOTS / Berpikir Kritis'
+                },
+                {
+                    platform: 'gemini',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas XII / Fase F',
+                    mapel: 'Ekonomi (SMA)',
+                    topik: 'Kebijakan Moneter, Kebijakan Fiskal, dan Pengendalian Inflasi Nasional',
+                    tujuan: 'Peserta didik mampu menganalisis dampak instrumen kebijakan Bank Indonesia dan pemerintah terhadap stabilitas harga, daya beli masyarakat, serta pertumbuhan ekonomi.',
+                    jenisMedia: 'Kuis Pilihan Ganda HOTS',
+                    gaya: 'Formal Akademis',
+                    tingkat: 'HOTS / Berpikir Kritis'
+                },
+                {
+                    platform: 'canva',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas X / Fase E',
+                    mapel: 'Sosiologi (SMA)',
+                    topik: 'Interaksi Sosial, Lembaga Sosial, dan Dinamika Masyarakat Digital',
+                    tujuan: 'Peserta didik mampu mengidentifikasi bentuk interaksi asosiatif dan disosiatif di media sosial serta merancang poster literasi etika digital remaja.',
+                    jenisMedia: 'Poster Edukasi Kelas',
+                    gaya: 'Interaktif & Menyenangkan',
+                    tingkat: 'Diferensiasi'
+                },
+                {
+                    platform: 'gemini',
+                    jenjang: 'SMA/MA/SMK',
+                    kelas: 'Kelas XI / Fase F',
+                    mapel: 'Fisika (SMA)',
+                    topik: 'Hukum Kekekalan Energi Mekanik dan Dinamika Gerak Lurus dalam Kehidupan Sehari-hari',
+                    tujuan: 'Peserta didik mampu memodelkan transformasi energi potensial dan kinetik pada lintasan roller coaster serta memecahkan persoalan kuantitatif secara sistematis.',
+                    jenisMedia: 'Modul Ajar Kurikulum Merdeka',
+                    gaya: 'Formal Akademis',
+                    tingkat: 'HOTS / Berpikir Kritis'
+                },
+                {
+                    platform: 'canva',
+                    jenjang: 'SMP/MTs',
+                    kelas: 'Kelas VIII / Fase D',
+                    mapel: 'Ilmu Pengetahuan Alam (IPA Terpadu SD/SMP)',
+                    topik: 'Sistem Peredaran Darah Manusia & Pencegahan Penyakit Kardiovaskular',
+                    tujuan: 'Peserta didik mampu membedakan peredaran darah kecil dan besar serta menyajikan kampanye pola hidup sehat berbasis data.',
+                    jenisMedia: 'Slide Presentasi Interaktif',
+                    gaya: 'Ilustrasi Kartun Edukatif',
+                    tingkat: 'Diferensiasi'
+                },
+                {
+                    platform: 'canva',
+                    jenjang: 'SD/MI',
+                    kelas: 'Kelas V / Fase C',
+                    mapel: 'IPAS (Ilmu Pengetahuan Alam dan Sosial - SD)',
+                    topik: 'Ekosistem, Rantai Makanan, dan Keseimbangan Lingkungan Sekitar',
+                    tujuan: 'Peserta didik dapat mengidentifikasi peran produsen, konsumen, dan pengurai dalam ekosistem sawah maupun hutan melalui cerita bergambar.',
+                    jenisMedia: 'Komik Strip Pembelajaran',
+                    gaya: 'Ilustrasi Kartun Edukatif',
+                    tingkat: 'Reguler'
+                }
+            ];
+
+            const STORAGE_KEY = 'z_asmarady_edu_prompt_history_v1';
+            let currentPlatform = 'gemini';
+            let sampleIndex = 0;
+
+            // ------------------------------------------------------------------
+            // 2. REFERENSI ELEMEN DOM
+            // ------------------------------------------------------------------
+            const els = {
+                tabGemini: document.getElementById('tabGemini'),
+                tabCanva: document.getElementById('tabCanva'),
+                jenjang: document.getElementById('jenjang'),
+                kelas: document.getElementById('kelas'),
+                mapelSearch: document.getElementById('mapelSearch'),
+                mapelSelect: document.getElementById('mapelSelect'),
+                mapelCustom: document.getElementById('mapelCustom'),
+                topik: document.getElementById('topik'),
+                tujuan: document.getElementById('tujuan'),
+                jenisMedia: document.getElementById('jenisMedia'),
+                gaya: document.getElementById('gaya'),
+                tingkat: document.getElementById('tingkat'),
+                mediaPlatformHint: document.getElementById('mediaPlatformHint'),
+                activePlatformBadge: document.getElementById('activePlatformBadge'),
+                promptOutput: document.getElementById('promptOutput'),
+                charCount: document.getElementById('charCount'),
+                btnCopyPrompt: document.getElementById('btnCopyPrompt'),
+                btnCopyMainText: document.getElementById('btnCopyMainText'),
+                btnToolbarCopy: document.getElementById('btnToolbarCopy'),
+                btnTopbarCopy: document.getElementById('btnTopbarCopy'),
+                btnHeaderCopy: document.getElementById('btnHeaderCopy'),
+                btnSelectAllPrompt: document.getElementById('btnSelectAllPrompt'),
+                btnAutoFill: document.getElementById('btnAutoFill'),
+                btnResetForm: document.getElementById('btnResetForm'),
+                btnClearHistory: document.getElementById('btnClearHistory'),
+                historyList: document.getElementById('historyList'),
+                toastContainer: document.getElementById('toastContainer'),
+                mapelChips: document.querySelectorAll('.mapel-chip')
+            };
+
+            // Simpan struktur asli optgroup mapel untuk fitur filter pencarian cepat
+            const ORIGINAL_MAPEL_GROUPS = Array.from(els.mapelSelect.querySelectorAll('optgroup')).map((group) => ({
+                label: group.label,
+                options: Array.from(group.querySelectorAll('option')).map((opt) => ({
+                    value: opt.value,
+                    text: opt.textContent
+                }))
+            }));
+
+            function getActiveMapelValue() {
+                if (els.mapelSelect.value === '__CUSTOM__') {
+                    return els.mapelCustom.value.trim();
+                }
+                return els.mapelSelect.value.trim();
+            }
+
+            function setActiveMapelValue(mapelName) {
+                // Reset filter pencarian agar semua opsi tersedia
+                if (els.mapelSearch.value !== '') {
+                    els.mapelSearch.value = '';
+                    filterMapelDropdown('');
+                }
+
+                const matchingOption = Array.from(els.mapelSelect.options).find(
+                    (opt) => opt.value.toLowerCase() === String(mapelName).toLowerCase()
+                );
+
+                if (matchingOption) {
+                    els.mapelSelect.value = matchingOption.value;
+                    els.mapelCustom.style.display = 'none';
+                } else if (mapelName) {
+                    els.mapelSelect.value = '__CUSTOM__';
+                    els.mapelCustom.style.display = 'block';
+                    els.mapelCustom.value = mapelName;
+                } else {
+                    els.mapelSelect.selectedIndex = 0;
+                    els.mapelCustom.style.display = 'none';
+                    els.mapelCustom.value = '';
+                }
+            }
+
+            function filterMapelDropdown(keyword) {
+                const query = keyword.trim().toLowerCase();
+                const previousVal = els.mapelSelect.value;
+                els.mapelSelect.innerHTML = '';
+
+                let totalMatches = 0;
+
+                ORIGINAL_MAPEL_GROUPS.forEach((group) => {
+                    const matchedOpts = group.options.filter((opt) => {
+                        if (opt.value === '__CUSTOM__') return true;
+                        if (!query) return true;
+                        return opt.text.toLowerCase().includes(query) || group.label.toLowerCase().includes(query);
+                    });
+
+                    if (matchedOpts.length > 0) {
+                        const optgroupEl = document.createElement('optgroup');
+                        optgroupEl.label = group.label;
+
+                        matchedOpts.forEach((opt) => {
+                            if (opt.value !== '__CUSTOM__') totalMatches++;
+                            const optEl = document.createElement('option');
+                            optEl.value = opt.value;
+                            optEl.textContent = opt.text;
+                            optgroupEl.appendChild(optEl);
+                        });
+
+                        els.mapelSelect.appendChild(optgroupEl);
+                    }
+                });
+
+                // Pertahankan pilihan sebelumnya jika masih ada di hasil filter, atau pilih hasil pertama
+                const stillExists = Array.from(els.mapelSelect.options).some((o) => o.value === previousVal);
+                if (stillExists) {
+                    els.mapelSelect.value = previousVal;
+                } else if (totalMatches > 0) {
+                    els.mapelSelect.selectedIndex = 0;
+                } else {
+                    els.mapelSelect.value = '__CUSTOM__';
+                }
+
+                els.mapelCustom.style.display = els.mapelSelect.value === '__CUSTOM__' ? 'block' : 'none';
+                generatePrompt();
+            }
+
+            // ------------------------------------------------------------------
+            // 3. FUNGSI NOTIFIKASI TOAST (Pengganti alert)
+            // ------------------------------------------------------------------
+            function showToast(message, borderColor = '#10b981') {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.style.borderLeftColor = borderColor;
+                toast.innerHTML = `<span>✓</span><span>${message}</span>`;
+                els.toastContainer.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    toast.style.transition = 'all 0.25s ease';
+                    setTimeout(() => toast.remove(), 260);
+                }, 2800);
+            }
+
+            // ------------------------------------------------------------------
+            // 4. UPDATE PILIHAN JENIS MEDIA SESUAI PLATFORM
+            // ------------------------------------------------------------------
+            function populateMediaOptions(platform, selectedValue = null) {
+                const options = MEDIA_OPTIONS[platform] || [];
+                els.jenisMedia.innerHTML = '';
+
+                options.forEach((optText) => {
+                    const option = document.createElement('option');
+                    option.value = optText;
+                    option.textContent = optText;
+                    if (selectedValue && selectedValue === optText) {
+                        option.selected = true;
+                    }
+                    els.jenisMedia.appendChild(option);
+                });
+            }
+
+            function switchPlatform(platform) {
+                currentPlatform = platform;
+
+                if (platform === 'gemini') {
+                    els.tabGemini.classList.add('active-gemini');
+                    els.tabGemini.setAttribute('aria-selected', 'true');
+                    els.tabCanva.classList.remove('active-canva');
+                    els.tabCanva.setAttribute('aria-selected', 'false');
+
+                    els.mediaPlatformHint.textContent = 'Opsi khusus Google Gemini';
+                    els.activePlatformBadge.textContent = 'Target: Google Gemini';
+                    els.activePlatformBadge.className = 'platform-pill pill-gemini';
+                } else {
+                    els.tabCanva.classList.add('active-canva');
+                    els.tabCanva.setAttribute('aria-selected', 'true');
+                    els.tabGemini.classList.remove('active-gemini');
+                    els.tabGemini.setAttribute('aria-selected', 'false');
+
+                    els.mediaPlatformHint.textContent = 'Opsi khusus Canva AI / Magic Media';
+                    els.activePlatformBadge.textContent = 'Target: Canva AI / Magic Media';
+                    els.activePlatformBadge.className = 'platform-pill pill-canva';
+                }
+
+                populateMediaOptions(platform);
+                generatePrompt();
+            }
+
+            // ------------------------------------------------------------------
+            // 5. ENGINE REKAYASA PROMPT (PROMPT ENGINEERING GENERATOR)
+            // ------------------------------------------------------------------
+            function generatePrompt() {
+                const jenjang = els.jenjang.value.trim() || 'SMA/MA/SMK';
+                const kelas = els.kelas.value.trim() || 'Kelas X / Fase E';
+                const mapel = getActiveMapelValue() || '[Nama Mata Pelajaran]';
+                const topik = els.topik.value.trim() || '[Topik / Materi Pokok]';
+                const tujuan = els.tujuan.value.trim();
+                const jenisMedia = els.jenisMedia.value;
+                const gaya = els.gaya.value;
+                const tingkat = els.tingkat.value;
+
+                const tujuanBlock = tujuan
+                    ? `- Tujuan Pembelajaran (TP): ${tujuan}`
+                    : `- Tujuan Pembelajaran (TP): Rumuskan secara otomatis tujuan pembelajaran yang terukur (menggunakan kata kerja operasional Taksonomi Bloom) sesuai topik "${topik}".`;
+
+                let promptText = '';
+
+                if (currentPlatform === 'gemini') {
+                    // STRUKTUR PROMPT KHUSUS GOOGLE GEMINI
+                    let spesifikTugas = '';
+                    let strukturOutput = '';
+
+                    switch (jenisMedia) {
+                        case 'Game Edukasi Interaktif (HTML5)':
+                            spesifikTugas = `Rancang dan tuliskan kode lengkap aplikasi web **Game Edukasi Interaktif berbasis HTML5, CSS3, dan JavaScript murni (1 file utuh siap jalan)** dengan tema "${topik}". Game harus memiliki mekanisme skor, nyawa/waktu, umpan balik edukatif instan setiap kali peserta didik menjawab/beraksi, serta layar rekap evaluasi di akhir permainan.`;
+                            strukturOutput = `1. **Konsep & Aturan Main Singkat**: Penjelasan cara bermain untuk guru dan siswa.\n2. **Kode Lengkap Satu File (index.html)**: Kode HTML + CSS responsif (ramah layar HP & laptop) + JavaScript tanpa error, dilengkapi ilustrasi vektor SVG/emoji dan efek suara sintetis (Web Audio API) tanpa file eksternal.\n3. **Panduan Penggunaan di Kelas**: Cara menjalankan file secara offline maupun melalui proyektor kelas.`;
+                            break;
+                        case 'Aplikasi Pembelajaran LMS':
+                            spesifikTugas = `Rancang dan bangun **Aplikasi Pembelajaran LMS (Learning Management System) mini berbasis Web (HTML5, CSS3, dan JavaScript murni dalam 1 file utuh siap pakai)** dengan pendekatan ${tingkat} untuk topik "${topik}". Aplikasi harus mendukung alur belajar terstruktur per modul/topik, navigasi materi & video/ilustrasi embedded, kuis/latihan evaluasi dengan penilaian otomatis, pelacakan progres belajar & skor peserta didik (tersimpan di localStorage), serta tampilan dasbor guru/siswa yang responsif.`;
+                            strukturOutput = `1. **Arsitektur Fitur & Alur Belajar LMS**: Daftar modul/unit pembelajaran, mekanisme penguncian/kemajuan materi, sistem penilaian kuis, dan penyimpanan progres siswa.\n2. **Kode Lengkap Aplikasi LMS Satu File (index.html)**: Struktur HTML semantik, tata letak sidebar/konten responsif, logika interaktif materi + kuis + rekap nilai/progres, dan penyimpanan lokal tanpa ketergantungan backend eksternal.\n3. **Panduan Implementasi & Evaluasi Kelas**: Cara guru mengoperasikan LMS mini di kelas/lab komputer serta cara membaca capaian belajar peserta didik.`;
+                            break;
+                        case 'Presentasi Interaktif':
+                            spesifikTugas = `Rancang dan buat **Presentasi Interaktif berbasis Web (HTML5, CSS3, dan JavaScript murni dalam 1 file utuh)** dengan gaya "${gaya}" untuk topik "${topik}". Presentasi harus mendukung navigasi slide (tombol berikutnya/sebelumnya & keyboard panah), kartu/tab materi interaktif, pertanyaan pemantik/kuis cepat langsung di dalam slide dengan umpan balik instan, serta mode tampilan yang jelas untuk proyektor kelas maupun layar perangkat siswa.`;
+                            strukturOutput = `1. **Peta Alur Slide & Titik Interaksi**: Susunan slide pembuka, inti materi bertahap, aktivitas interaktif/kuis kilat, dan penutup/refleksi.\n2. **Kode Lengkap Presentasi Interaktif Satu File (index.html)**: Slide deck responsif dengan transisi halus, elemen interaktif (toggle konsep, kuis pilihan ganda langsung di slide, dan indikator progres slide), serta kontrol navigasi lengkap.\n3. **Skenario Fasilitasi Guru**: Panduan singkat penggunaan presentasi interaktif selama proses pembelajaran berlangsung.`;
+                            break;
+                        case 'Kuis Pilihan Ganda HOTS':
+                            spesifikTugas = `Susun paket **10 Soal Pilihan Ganda berbasis HOTS (Higher Order Thinking Skills)** mengenai "${topik}". Setiap soal wajib diawali stimulus kontekstual (studi kasus, kutipan data, ilustrasi situasi nyata, atau masalah kehidupan sehari-hari) sehingga menuntut penalaran tingkat ${tingkat}.`;
+                            strukturOutput = `1. **Kisi-Kisi Soal**: Tabel pemetaan indikator soal, level kognitif (C4/C5/C6), dan nomor soal.\n2. **Naskah Soal Berbasis Stimulus**: 10 soal lengkap dengan 5 opsi jawaban (A–E untuk SMA/PT atau A–D untuk SD/SMP) yang homogen dan logis.\n3. **Kunci Jawaban & Pembahasan Mendalam**: Penjelasan mengapa jawaban benar tepat dan analisis pengecoh (distractor) pada opsi lainnya.`;
+                            break;
+                        case 'Modul Ajar Kurikulum Merdeka':
+                            spesifikTugas = `Susun **Modul Ajar Kurikulum Merdeka** yang lengkap, aplikatif, dan berpusat pada peserta didik (Student-Centered Learning) untuk topik "${topik}" dengan pendekatan ${tingkat}.`;
+                            strukturOutput = `1. **Informasi Umum**: Identitas modul, kompetensi awal, Profil Pelajar Pancasila yang relevan, sarana prasarana, dan model pembelajaran (misal: PBL/PjBL).\n2. **Komponen Inti**: Tujuan pembelajaran, pemahaman bermakna, pertanyaan pemantik, dan langkah-langkah kegiatan pembelajaran (Pendahuluan, Inti, Penutup) lengkap dengan alokasi waktu.\n3. **Asesmen & Rubrik Penilaian**: Asesmen diagnostik, formatif, sumatif, serta rubrik penilaian sikap, pengetahuan, dan keterampilan.\n4. **Pengayaan, Remedial & Lampiran Bahan Bacaan**.`;
+                            break;
+                        case 'Simulasi / Studi Kasus':
+                            spesifikTugas = `Buat skenario **Simulasi Pembelajaran / Studi Kasus Kontekstual** interaktif bertema "${topik}" yang menempatkan peserta didik sebagai pengambil keputusan atau pemecah masalah nyata.`;
+                            strukturOutput = `1. **Latar Belakang Kasus / Skenario Masalah**: Narasi realistis yang memicu rasa ingin tahu dan diskusi kelompok.\n2. **Peran & Data Pendukung**: Informasi atau fakta kunci yang harus dianalisis peserta didik.\n3. **Pertanyaan Pemandu Diskusi (Scaffolding)**: Tahapan analisis masalah dari identifikasi hingga perumusan solusi.\n4. **Alternatif Solusi & Rubrik Argumentasi**: Panduan bagi guru dalam mengevaluasi hasil diskusi siswa.`;
+                            break;
+                        default: // Rangkuman Materi & LKPD
+                            spesifikTugas = `Susun **Bahan Ajar Ringkas (Rangkuman Materi Esensial) sekaligus Lembar Kerja Peserta Didik (LKPD)** terstruktur untuk topik "${topik}".`;
+                            strukturOutput = `1. **Peta Konsep & Rangkuman Materi Esensial**: Poin-poin inti yang mudah dipahami dengan analogi nyata.\n2. **Glosarium Istilah Penting**: Definisi singkat kata kunci materi.\n3. **Lembar Kerja Peserta Didik (LKPD)**: Identitas, petunjuk belajar, aktivitas eksplorasi mandiri/kelompok, latihan soal bertingkat, dan kolom refleksi diri siswa.`;
+                            break;
+                    }
+
+                    promptText = `=== PROMPT REKAYASA MEDIA PEMBELAJARAN (TARGET: GOOGLE GEMINI) ===
+
+[1. PERAN / ROLE]
+Bertindaklah sebagai Pakar Teknologi Pendidikan, Desainer Instruksional Senior, dan Guru Profesional mata pelajaran ${mapel} yang menguasai Kurikulum Merdeka serta pedagogi digital modern.
+
+[2. KONTEKS PEMBELAJARAN]
+- Jenjang Pendidikan : ${jenjang}
+- Kelas / Fase         : ${kelas}
+- Mata Pelajaran     : ${mapel}
+- Topik / Materi Pokok : ${topik}
+${tujuanBlock}
+- Pendekatan / Level   : ${tingkat}
+- Gaya Bahasa & Visual : ${gaya}
+
+[3. TUGAS SPESIFIK]
+${spesifikTugas}
+
+[4. STRUKTUR OUTPUT YANG DIHARAPKAN]
+Sajikan jawaban secara sistematis, rapi, dan siap langsung digunakan guru di kelas dengan susunan berikut:
+${strukturOutput}
+
+[5. BATASAN & KRITERIA KUALITAS]
+- Gunakan Bahasa Indonesia yang baku, komunikatif, dan sesuai dengan tingkat perkembangan kognitif peserta didik jenjang ${jenjang} (${kelas}).
+- Pastikan seluruh konten bebas dari bias, akurat secara keilmuan, serta mendorong keterampilan berpikir kritis dan karakter positif.
+- Jika menghasilkan kode atau tabel, pastikan formatnya bersih, rapi, dan tanpa bagian yang dipotong.`;
+
+                } else {
+                    // STRUKTUR PROMPT KHUSUS CANVA AI / MAGIC MEDIA / MAGIC DESIGN
+                    let spesifikCanva = '';
+                    let strukturCanva = '';
+
+                    switch (jenisMedia) {
+                        case 'Slide Presentasi Interaktif':
+                            spesifikCanva = `Buatkan **Kerangka Konten & Arahan Desain Visual untuk 10 Slide Presentasi Interaktif di Canva (Canva Presentations / Magic Design)** mengenai topik "${topik}". Setiap slide harus ringkas (maksimal 30–40 kata per slide agar tidak penuh teks), memikat secara visual, dan memuat elemen interaksi kelas.`;
+                            strukturCanva = `1. **Konsep Tema Visual & Palet Warna**: Rekomendasi kombinasi warna (kode HEX), pasangan font (Heading & Body), dan kata kunci elemen grafis Canva.\n2. **Rincian Slide 1 s.d. Slide 10**: Untuk setiap slide tuliskan:\n   - *Judul Slide & Subjudul*\n   - *Teks Inti / Poin Utama* (singkat & padat)\n   - *Prompt Gambar / Ilustrasi untuk Canva Magic Media*\n   - *Catatan Interaksi Guru & Siswa* (pertanyaan pemantik/kuis cepat di slide).`;
+                            break;
+                        case 'Presentasi Interaktif':
+                            spesifikCanva = `Rancang **Naskah & Tata Letak Presentasi Interaktif di Canva (Canva Presentations)** dengan gaya visual "${gaya}" dan pendekatan ${tingkat} untuk topik "${topik}". Tekankan alur penyajian yang mengajak partisipasi aktif peserta didik (pertanyaan pemantik, polling/tebak cepat, studi kasus visual, dan tautan/elemen interaktif antar-slide) dengan kepadatan teks yang ringkas dan mudah dibaca.`;
+                            strukturCanva = `1. **Identitas Visual, Warna & Tipografi Canva**: Palet warna (kode HEX), font judul & isi, serta kata kunci elemen/animasi di Canva.\n2. **Storyboard Slide Interaktif (8–10 Slide)**: Untuk setiap slide cantumkan:\n   - *Tujuan & Judul Slide*\n   - *Teks Utama di Kanvas* (ringkas dan terstruktur)\n   - *Elemen Interaktivitas Kelas* (pertanyaan diskusi, tantangan/kuis singkat, atau tombol/tautan navigasi)\n   - *Prompt Ilustrasi Canva Magic Media*.`;
+                            break;
+                        case 'Aplikasi Pembelajaran LMS':
+                            spesifikCanva = `Rancang **Paket Desain Visual & Arsitektur Konten Modul Pembelajaran LMS di Canva (Canva Docs / Canva Websites / Slide Modul)** dengan pendekatan ${tingkat} untuk topik "${topik}". Susun struktur halaman/modul yang menyerupai alur LMS terarah—mencakup beranda modul, unit materi bertahap, panduan aktivitas/tugas, ceklis progres mandiri, dan evaluasi/refleksi—agar mudah disematkan atau dibagikan kepada peserta didik.`;
+                            strukturCanva = `1. **Struktur Navigasi & Halaman Modul LMS**: Susunan bagian/halaman (Beranda/Orientasi, Unit 1–3 Materi, Aktivitas & Latihan, Refleksi & Penutup) lengkap dengan arahan tautan/navigasi di Canva.\n2. **Konten Ringkas per Unit Pembelajaran**: Ringkasan konsep inti, panduan tugas terstruktur, dan soal pemantik/evaluasi singkat.\n3. **Panduan Elemen Visual & Prompt Canva Magic Media**: Rekomendasi tata letak, ikon navigasi, dan prompt gambar AI yang konsisten di seluruh modul.`;
+                            break;
+                        case 'Infografis Konsep':
+                            spesifikCanva = `Rancang **Naskah & Tata Letak Infografis Edukasi Vertikal di Canva** yang merangkum konsep utama "${topik}" secara visual, sistematis, dan mudah dipindai mata dalam sekali lihat.`;
+                            strukturCanva = `1. **Hirarki Tata Letak (Layout Grid)**: Pembagian bagian Atas (Header & Hook), Tengah (Alur Konsep / Perbandingan / Data), dan Bawah (Kesimpulan & Call to Action).\n2. **Teks Siap Tempel per Bagian**: Judul utama yang menarik perhatian, sub-poin ringkas, dan label infografis.\n3. **Panduan Ikon & Prompt Canva Magic Media**: Daftar kata kunci pencarian elemen di Canva Elements serta prompt generator gambar AI untuk ilustrasi utama.`;
+                            break;
+                        case 'Poster Edukasi Kelas':
+                            spesifikCanva = `Buatkan **Konsep Desain & Copywriting Poster Edukasi Dinding Kelas (Ukuran A3/A2)** bertema "${topik}" yang persuasif, inspiratif, dan mudah diingat oleh peserta didik ${jenjang}.`;
+                            strukturCanva = `1. **Headline Utama (Slogan Kuat)** & **Sub-headline Penjelas**.\n2. **3–5 Pesan Kunci Visual**: Poin singkat dengan bahasa yang menggugah.\n3. **Deskripsi Adegan Ilustrasi Utama (Prompt Canva Magic Media)**: Deskripsi visual detail dalam gaya "${gaya}" agar dapat langsung dibuat melalui fitur Text-to-Image Canva.\n4. **Tipografi & Komposisi Warna**: Arahan kontras warna agar terbaca jelas dari jarak 3 meter di ruang kelas.`;
+                            break;
+                        case 'Lembar Kerja Peserta Didik (LKPD) Visual':
+                            spesifikCanva = `Susun **Tata Letak & Konten LKPD Visual (Ukuran A4) siap cetak di Canva Docs / Canva Whiteboards** untuk topik "${topik}" dengan pendekatan ${tingkat}.`;
+                            strukturCanva = `1. **Header LKPD**: Kotak identitas (Nama, Kelompok, Kelas, Tanggal) & Tujuan Pembelajaran.\n2. **Zona Aktivitas 1 (Stimulus Visual & Pengamatan)**: Instruksi mengamati ilustrasi/kasus.\n3. **Zona Aktivitas 2 (Tabel/Peta Pikiran/Kotak Analisis)**: Struktur ruang kerja siswa.\n4. **Zona Refleksi & Penilaian Mandiri**: Skala emoji/bintang pemahaman siswa serta arahan elemen grafis pemanis halaman.`;
+                            break;
+                        default: // Komik Strip Pembelajaran
+                            spesifikCanva = `Buatkan **Naskah Storyboard & Prompt Visual Komik Strip Pembelajaran (6 Panel)** mengenai "${topik}" yang menceritakan penerapan konsep dalam kehidupan sehari-hari peserta didik ${jenjang}.`;
+                            strukturCanva = `1. **Profil Karakter Utama**: 2–3 tokoh siswa/guru yang konsisten penampilannya di setiap panel.\n2. **Rincian Panel 1 s.d. Panel 6**: Untuk setiap panel sertakan:\n   - *Deskripsi Adegan & Ekspresi (Prompt Canva Magic Media)*\n   - *Dialog Balon Kata (singkat, natural, maksimal 20 kata per balon)*\n   - *Narasi Kotak Keterangan (Caption)*.\n3. **Panel Penutup (Pesan Moral & Pertanyaan Diskusi Kelas)**.`;
+                            break;
+                    }
+
+                    promptText = `=== PROMPT REKAYASA DESAIN VISUAL (TARGET: CANVA AI / MAGIC MEDIA) ===
+
+[1. PERAN / ROLE]
+Bertindaklah sebagai Desainer Media Pembelajaran Visual, Spesialis Komunikasi Grafis Pendidikan, dan Guru Kreatif mata pelajaran ${mapel} yang mahir mengoptimalkan fitur Canva Magic Design & Magic Media.
+
+[2. KONTEKS PEMBELAJARAN]
+- Jenjang Pendidikan : ${jenjang}
+- Kelas / Fase         : ${kelas}
+- Mata Pelajaran     : ${mapel}
+- Topik / Materi Pokok : ${topik}
+${tujuanBlock}
+- Gaya Visual Desain   : ${gaya}
+- Pendekatan Kognitif  : ${tingkat}
+
+[3. TUGAS SPESIFIK]
+${spesifikCanva}
+
+[4. STRUKTUR OUTPUT YANG DIHARAPKAN]
+Susun naskah dan panduan visual berikut agar saya dapat langsung menyalin teks serta prompt gambarnya ke dalam lembar kerja Canva:
+${strukturCanva}
+
+[5. BATASAN & KRITERIA KUALITAS]
+- Pastikan teks yang dirancang untuk masuk ke kanvas Canva sangat ringkas, padat, bebas paragraf panjang (anti-wall-of-text), dan mengutamakan keterbacaan visual.
+- Sertakan prompt deskripsi gambar (untuk Canva Magic Media) yang spesifik menyebutkan objek, suasana edukatif, pencahayaan cerah, dan gaya visual "${gaya}" tanpa teks bertumpuk di dalam gambar.
+- Sesuaikan estetika dan bahasa dengan karakter peserta didik ${jenjang} (${kelas}).`;
+                }
+
+                els.promptOutput.value = promptText;
+                els.charCount.textContent = `${promptText.length.toLocaleString('id-ID')} karakter`;
+            }
+
+            // ------------------------------------------------------------------
+            // 6. MANAJEMEN RIWAYAT PROMPT (LOCALSTORAGE)
+            // ------------------------------------------------------------------
+            function getHistory() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    return raw ? JSON.parse(raw) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveToHistory() {
+                const topikVal = els.topik.value.trim();
+                const mapelVal = getActiveMapelValue();
+                if (!topikVal && !mapelVal) return;
+
+                const history = getHistory();
+                const newEntry = {
+                    id: Date.now(),
+                    timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+                    platform: currentPlatform,
+                    jenjang: els.jenjang.value,
+                    kelas: els.kelas.value,
+                    mapel: mapelVal || 'Umum',
+                    topik: topikVal || 'Tanpa Judul Topik',
+                    tujuan: els.tujuan.value,
+                    jenisMedia: els.jenisMedia.value,
+                    gaya: els.gaya.value,
+                    tingkat: els.tingkat.value,
+                    prompt: els.promptOutput.value
+                };
+
+                // Hindari duplikat persis berurutan
+                if (history.length > 0 && history[0].prompt === newEntry.prompt) {
+                    return;
+                }
+
+                history.unshift(newEntry);
+                // Batasi maksimal 15 riwayat terbaru
+                if (history.length > 15) history.pop();
+
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+                } catch (e) {
+                    // Abaikan jika kuota penuh
+                }
+                renderHistory();
+            }
+
+            function deleteHistoryItem(id) {
+                const filtered = getHistory().filter((item) => item.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+                renderHistory();
+                showToast('Item riwayat dihapus.', '#f59e0b');
+            }
+
+            function loadHistoryItem(id) {
+                const item = getHistory().find((entry) => entry.id === id);
+                if (!item) return;
+
+                switchPlatform(item.platform);
+                els.jenjang.value = item.jenjang;
+                els.kelas.value = item.kelas;
+                setActiveMapelValue(item.mapel);
+                els.topik.value = item.topik;
+                els.tujuan.value = item.tujuan;
+                populateMediaOptions(item.platform, item.jenisMedia);
+                els.gaya.value = item.gaya;
+                els.tingkat.value = item.tingkat;
+
+                generatePrompt();
+                showToast('Konfigurasi prompt dimuat kembali!');
+            }
+
+            function copyHistoryItemPrompt(id) {
+                const item = getHistory().find((entry) => entry.id === id);
+                if (!item || !item.prompt) return;
+
+                copyRawTextToClipboard(item.prompt, `Prompt "${item.topik}" berhasil disalin ke clipboard!`);
+            }
+
+            function renderHistory() {
+                const history = getHistory();
+                els.historyList.innerHTML = '';
+
+                if (history.length === 0) {
+                    els.historyList.innerHTML = `
+                        <div class="empty-state">
+                            Belum ada riwayat prompt tersimpan.<br>
+                            Klik <strong>"Salin Prompt"</strong> untuk menyimpan otomatis ke riwayat sesi ini.
+                        </div>
+                    `;
+                    return;
+                }
+
+                history.forEach((item) => {
+                    const row = document.createElement('div');
+                    row.className = 'history-item';
+
+                    const badgeLabel = item.platform === 'gemini' ? 'Gemini' : 'Canva';
+                    const badgeColor = item.platform === 'gemini' ? '#1d4ed8' : '#7c3aed';
+
+                    row.innerHTML = `
+                        <div class="history-info" title="Klik untuk memuat ulang parameter ini">
+                            <div class="history-title">${escapeHTML(item.topik)}</div>
+                            <div class="history-meta">
+                                <span style="color:${badgeColor}; font-weight:700;">${badgeLabel}</span>
+                                <span>•</span>
+                                <span>${escapeHTML(item.mapel)} (${escapeHTML(item.jenjang)})</span>
+                                <span>•</span>
+                                <span>${item.timestamp}</span>
+                            </div>
+                        </div>
+                        <div class="history-actions">
+                            <button type="button" class="icon-btn copy-hist btn-copy-item" data-id="${item.id}" title="Salin prompt ini langsung">Salin</button>
+                            <button type="button" class="icon-btn btn-load-item" data-id="${item.id}" title="Muat parameter">Muat</button>
+                            <button type="button" class="icon-btn del btn-del-item" data-id="${item.id}" title="Hapus item">✕</button>
+                        </div>
+                    `;
+
+                    row.querySelector('.history-info').addEventListener('click', () => loadHistoryItem(item.id));
+                    row.querySelector('.btn-copy-item').addEventListener('click', () => copyHistoryItemPrompt(item.id));
+                    row.querySelector('.btn-load-item').addEventListener('click', () => loadHistoryItem(item.id));
+                    row.querySelector('.btn-del-item').addEventListener('click', () => deleteHistoryItem(item.id));
+
+                    els.historyList.appendChild(row);
+                });
+            }
+
+            function escapeHTML(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            // ------------------------------------------------------------------
+            // 7. SALIN KE CLIPBOARD (Kompatibel Iframe & Browser Modern)
+            // ------------------------------------------------------------------
+            function copyRawTextToClipboard(text, customToastMsg = null) {
+                if (!text) return;
+
+                const tempArea = document.createElement('textarea');
+                tempArea.value = text;
+                tempArea.style.position = 'fixed';
+                tempArea.style.left = '-9999px';
+                document.body.appendChild(tempArea);
+                tempArea.select();
+                tempArea.setSelectionRange(0, 99999);
+
+                let success = false;
+                try {
+                    success = document.execCommand('copy');
+                } catch (err) {
+                    success = false;
+                }
+                document.body.removeChild(tempArea);
+
+                if (!success && navigator.clipboard) {
+                    navigator.clipboard.writeText(text).catch(() => {});
+                }
+
+                window.getSelection().removeAllRanges();
+                showToast(customToastMsg || 'Prompt berhasil disalin ke clipboard!');
+            }
+
+            function copyPromptToClipboard() {
+                const text = els.promptOutput.value;
+                if (!text) return;
+
+                els.promptOutput.focus();
+                els.promptOutput.select();
+                els.promptOutput.setSelectionRange(0, 99999);
+
+                let success = false;
+                try {
+                    success = document.execCommand('copy');
+                } catch (err) {
+                    success = false;
+                }
+
+                if (!success && navigator.clipboard) {
+                    navigator.clipboard.writeText(text).catch(() => {});
+                }
+
+                window.getSelection().removeAllRanges();
+
+                // Umpan balik visual sementara pada tombol Salin Prompt utama
+                els.btnCopyPrompt.classList.add('copied-state');
+                els.btnCopyMainText.textContent = '✓ Tersalin ke Clipboard!';
+                els.btnToolbarCopy.textContent = '✓ Tersalin!';
+                els.btnTopbarCopy.querySelector('span').textContent = 'Copied!';
+
+                setTimeout(() => {
+                    els.btnCopyPrompt.classList.remove('copied-state');
+                    els.btnCopyMainText.textContent = 'Salin Prompt';
+                    els.btnToolbarCopy.textContent = '📋 Salin Semua Prompt';
+                    els.btnTopbarCopy.querySelector('span').textContent = 'Copy';
+                }, 2000);
+
+                saveToHistory();
+                showToast('Prompt berhasil disalin & disimpan ke riwayat!');
+            }
+
+            function selectAllPromptText() {
+                els.promptOutput.focus();
+                els.promptOutput.select();
+                els.promptOutput.setSelectionRange(0, 99999);
+                showToast('Seluruh teks prompt telah disorot (siap Ctrl+C / Salin).', '#0d9488');
+            }
+
+            // ------------------------------------------------------------------
+            // 8. EVENT LISTENERS
+            // ------------------------------------------------------------------
+            els.tabGemini.addEventListener('click', () => switchPlatform('gemini'));
+            els.tabCanva.addEventListener('click', () => switchPlatform('canva'));
+
+            // Filter Pencarian & Pilihan Dropdown Mapel
+            els.mapelSearch.addEventListener('input', (e) => {
+                filterMapelDropdown(e.target.value);
+            });
+
+            els.mapelSelect.addEventListener('change', () => {
+                if (els.mapelSelect.value === '__CUSTOM__') {
+                    els.mapelCustom.style.display = 'block';
+                    els.mapelCustom.focus();
+                } else {
+                    els.mapelCustom.style.display = 'none';
+                }
+                generatePrompt();
+            });
+
+            // Update Real-Time setiap kali ada perubahan input
+            [
+                els.jenjang,
+                els.kelas,
+                els.mapelCustom,
+                els.topik,
+                els.tujuan,
+                els.jenisMedia,
+                els.gaya,
+                els.tingkat
+            ].forEach((inputEl) => {
+                inputEl.addEventListener('input', generatePrompt);
+                inputEl.addEventListener('change', generatePrompt);
+            });
+
+            // Saran Cepat Mata Pelajaran
+            els.mapelChips.forEach((chip) => {
+                chip.addEventListener('click', () => {
+                    setActiveMapelValue(chip.dataset.value);
+                    generatePrompt();
+                    showToast(`Mata pelajaran diatur ke ${chip.dataset.value}`, '#1e3a8a');
+                });
+            });
+
+            // Tombol Contoh Cepat (Isi Otomatis)
+            els.btnAutoFill.addEventListener('click', () => {
+                const sample = SAMPLE_SCENARIOS[sampleIndex % SAMPLE_SCENARIOS.length];
+                sampleIndex++;
+
+                switchPlatform(sample.platform);
+                els.jenjang.value = sample.jenjang;
+                els.kelas.value = sample.kelas;
+                setActiveMapelValue(sample.mapel);
+                els.topik.value = sample.topik;
+                els.tujuan.value = sample.tujuan;
+                populateMediaOptions(sample.platform, sample.jenisMedia);
+                els.gaya.value = sample.gaya;
+                els.tingkat.value = sample.tingkat;
+
+                generatePrompt();
+                showToast(`Contoh skenario "${sample.mapel}" berhasil dimuat!`, '#d97706');
+            });
+
+            // Tombol Reset Formulir
+            els.btnResetForm.addEventListener('click', () => {
+                els.kelas.value = '';
+                els.mapelSearch.value = '';
+                filterMapelDropdown('');
+                els.mapelSelect.selectedIndex = 0;
+                els.mapelCustom.value = '';
+                els.mapelCustom.style.display = 'none';
+                els.topik.value = '';
+                els.tujuan.value = '';
+                generatePrompt();
+                showToast('Formulir berhasil dikosongkan.', '#64748b');
+            });
+
+            // Tombol-tombol Menu Salin Prompt
+            els.btnCopyPrompt.addEventListener('click', copyPromptToClipboard);
+            els.btnToolbarCopy.addEventListener('click', copyPromptToClipboard);
+            els.btnTopbarCopy.addEventListener('click', copyPromptToClipboard);
+            els.btnHeaderCopy.addEventListener('click', copyPromptToClipboard);
+            els.btnSelectAllPrompt.addEventListener('click', selectAllPromptText);
+
+            // Tombol Hapus Semua Riwayat
+            els.btnClearHistory.addEventListener('click', () => {
+                localStorage.removeItem(STORAGE_KEY);
+                renderHistory();
+                showToast('Seluruh riwayat prompt telah dibersihkan.', '#ef4444');
+            });
+
+            // ------------------------------------------------------------------
+            // 9. INISIALISASI SAAT HALAMAN DIMUAT
+            // ------------------------------------------------------------------
+            populateMediaOptions(currentPlatform);
+            generatePrompt();
+            renderHistory();
+        })();
+    </script>
+</body>
+</html>
